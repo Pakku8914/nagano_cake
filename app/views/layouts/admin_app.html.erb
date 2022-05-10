@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NaganoCake</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <div class="container">
+          <%= link_to "LOGO", admin_top_path, class:"navbar-brand"%>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+              <li><%= link_to "商品一覧", admin_items_path %></li>
+              <li><%= link_to "会員一覧", admin_customers_path %></li>
+              <li><%= link_to "注文履歴一覧", admin_top_path %></li>
+              <li><%= link_to "ジャンル一覧", admin_genres_path %></li>
+              <li><%= link_to "ログアウト", destroy_admin_session_path, method: :delete %></li>
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <%= form_with url: admin_search_path, method: :get, local: true do |f| %>
+<!--        何が入力されたのかを保持しておくため、valueに@keywordを指定-->
+        商品検索: <%= f.text_field :keyword, value: @keyword %>
+      <% end %>
+    </header>
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>

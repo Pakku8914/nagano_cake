@@ -1,0 +1,62 @@
+<h1>注文履歴詳細</h1>
+<%= form_with model: @order, url: admin_order_path(@order.id), method: :patch, local:true do |f| %>
+  <table>
+    <tr>
+      <th>購入者</th>
+      <td><%= @order.costomer.last_name %> <%= @order.costomer.first_name %></td>
+    </tr>
+    <tr>
+      <th>注文日</th>
+      <td><%= @order.created_at.strftime("%Y/%m/%d") %></td>
+    </tr>
+    <tr>
+      <th>配送先</th>
+      <td>
+        〒<%= @order.postal_code %> <%= @order.address %> <br>
+        <%= @order.name %>
+      </td>
+    </tr>
+    <tr>
+      <th>支払方法</th>
+      <td><%= Order.payment_methods_i18n[@order.payment_method] %></td>
+    </tr>
+    <tr>
+      <th>注文ステータス</th>
+      <td>
+<!--        ①Order.statusesでハッシュを取ってくる。-->
+<!--        ②キーの部分のみ取得し、mapメソッドでkに順番に要素を入れていく-->
+<!--        ③I18nでja.ymlの中の、t関数でどの階層にあるのかを明記する-->
+        <%= f.select :status, Order.statuses.keys.map {|k| [I18n.t("enums.order.status.#{k}"), k]} %>
+        <%= f.submit "更新" %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<table border="1">
+  <tr>
+    <td>商品名</td>
+    <td>単価（税込）</td>
+    <td>数量</td>
+    <td>小計</td>
+    <td>製作ステータス</td>
+    <td></td>
+  </tr>
+  <% @order_details.each do |order| %>
+    <tr>
+      <td><%= order.item.name %></td>
+      <td><%= order.price %></td>
+      <td><%= order.amount %></td>
+      <td><%= order.amount.to_i * order.price.to_i %></td>
+      <%= form_with model: order, url: admin_order_path(@order.id), method: :patch, local:true do |f| %>
+        <td>
+          <%= f.hidden_field :id, value: order.id %>
+          <%= f.select :making_status, OrderDetail.making_statuses.keys.map {|k| [I18n.t("enums.order_detail.making_status.#{k}"), k]} %>
+        </td>
+        <td>
+          <%= f.submit "更新" %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

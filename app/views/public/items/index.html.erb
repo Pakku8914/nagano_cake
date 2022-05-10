@@ -1,0 +1,21 @@
+<%= render "public/items/genre", genre: @genre %>
+<div class="items_index">
+  <h1>商品一覧</h1>
+  <div class="items">
+    <% @items.each do |f| %>
+      <% if f.is_active %>
+        <%= link_to items_show_path(f.id) do %>
+          <div class="item">
+            <% if f.image.attached? %>
+              <%= image_tag f.image, size: "200x200" %>
+            <% else %>
+              <%= image_tag 'noimage', size: "200x200"%>
+            <% end %>
+            <p><%= f.name %></p>
+            <p>￥<%= delimiter_num((f.price * 1.1).to_i) %></p>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

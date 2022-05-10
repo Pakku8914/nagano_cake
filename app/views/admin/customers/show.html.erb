@@ -1,0 +1,46 @@
+<h1><%= @user.last_name %><%= @user.first_name %>の会員詳細</h1>
+
+<table>
+  <tr>
+    <td width="150px">会員ID</td>
+    <td width="150px"><%= @user.id %></td>
+  </tr>
+  <tr>
+    <td>氏名</td>
+    <td><%= @user.last_name %>  <%= @user.first_name %></td>
+  </tr>
+  <tr>
+    <td>フリガナ</td>
+    <td><%= @user.last_name_kana %>  <%= @user.first_name_kana %></td>
+  </tr>
+  <tr>
+    <td>郵便番号</td>
+    <td><%= @user.postal_code %></td>
+  </tr>
+  <tr>
+    <td>住所</td>
+    <td><%= @user.address %></td>
+  </tr>
+  <tr>
+    <td>電話番号</td>
+    <td><%= @user.telephone_number %></td>
+  </tr>
+  <tr>
+    <td>メールアドレス</td>
+    <td><%= @user.email %></td>
+  </tr>
+  <tr>
+    <td>会員ステータス</td>
+    <td>
+<!--  論理削除済みか？-->
+      <% if @user.discarded? %>
+        退会済
+      <% else %>
+        有効
+      <% end %>
+    </td>
+  </tr>
+</table>
+<br>
+<%= link_to "編集する", edit_admin_customer_path(@user.id) %>
+<%= link_to "注文履歴一覧を見る", edit_admin_customer_path %>

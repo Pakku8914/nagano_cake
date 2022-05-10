@@ -1,0 +1,37 @@
+<h1>商品一覧</h1>
+<br>
+<%= link_to "商品追加", new_admin_item_path %>
+<br>
+<hr>
+<table>
+  <tr>
+    <td width="100px">商品ID</td>
+    <td width="200px">商品名</td>
+    <td width="100px">税抜価格</td>
+    <td width="200px">ジャンル</td>
+    <td width="130px">ステータス</td>
+  </tr>
+  <% @items.each do |f| %>
+    <tr>
+      <td>
+        <%= f.id %>
+      </td>
+      <td>
+        <%= link_to f.name, admin_item_path(f.id) %>
+      </td>
+      <td>
+        <%= f.price %>
+      </td>
+      <td>
+        <%= f.genre.name %>
+      </td>
+      <td>
+        <% if f.is_active %>
+          販売中
+        <% else %>
+          販売停止中
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

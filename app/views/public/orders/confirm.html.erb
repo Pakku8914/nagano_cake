@@ -1,0 +1,80 @@
+<h1>注文情報確認</h1>
+<% @sum_pay %>
+<table>
+  <tr>
+    <td>商品名</td>
+    <td>単価（税込）</td>
+    <td>数量</td>
+    <td>小計</td>
+  </tr>
+  <% @cart.each do |f| %>
+    <tr>
+      <td>
+        <% if f.item.image.attached? %>
+          <%= image_tag f.item.image, size: "50x50" %>
+        <% else %>
+          <%= image_tag 'noimage', size: "50x50"%>
+        <% end %>
+        <%= f.item.name %>
+      </td>
+      <td>
+        <%= delimiter_num((f.item.price * 1.1).to_i) %>
+      </td>
+      <td>
+        <%= f.amount %>
+      </td>
+      <% subtotal = f.item.price * 1.1 * f.amount.to_i %>
+      <td>
+        <%= delimiter_num(subtotal.to_i) %>
+      </td>
+      <% @sum_pay = (@sum_pay.to_i + subtotal.to_i) %>
+    </tr>
+  <% end %>
+</table>
+<br>
+<table>
+  <tr>
+    <td>送料</td>
+    <td>800</td>
+  </tr>
+  <tr>
+    <td>商品合計</td>
+    <td>
+      <%= delimiter_num(@sum_pay) %>
+    </td>
+  </tr>
+  <tr>
+    <td>請求金額</td>
+    <td>
+      <%= delimiter_num(@sum_pay + 800) %>
+    </td>
+  </tr>
+</table>
+
+<br>
+
+<h4>支払方法</h4>
+<%= Order.payment_methods_i18n[params[:order][:payment_method]] %>
+
+<br>
+
+<h4>お届け先</h4>
+<p>
+  〒<%= @new_order.postal_code %> <%= @new_order.address %>
+</p>
+<p><%= @new_order.name %></p>
+
+<br>
+
+<%= form_with model: @new_order, url: orders_path, method: :post, local:true do |f| %>
+  <%= f.hidden_field :postal_code %>
+  <%= f.hidden_field :name %>
+  <%= f.hidden_field :address %>
+  <%= f.hidden_field :shipping_cost %>
+  <%= f.hidden_field :total_payment, :value => (@sum_pay + 800).to_i %>
+  <%= f.hidden_field :payment_method %>
+  <% if params[:order][:send_address] == "2" %>
+    <%= f.hidden_field :create_address, :value => 1 %>
+  <% end %>
+  <%= f.submit "注文を確定する", data: { confirm: "本当に確定しますか？"} %>
+<% end %>

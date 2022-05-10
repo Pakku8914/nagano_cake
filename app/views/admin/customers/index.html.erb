@@ -1,0 +1,34 @@
+<div>
+  <h1>会員一覧</h1>
+  <table>
+    <tr>
+      <th width="150px">会員ID</th>
+      <th width="150px">氏名</th>
+      <th width="150px">メールアドレス</th>
+      <th width="150px">ステータス</th>
+    </tr>
+    <% @users.each do |f| %>
+
+      <tr>
+        <td>
+          <%= f.id %>
+        </td>
+        <td>
+          <%= link_to admin_customer_path(f) do %>
+            <%= f.last_name %> <%= f.first_name %>
+          <% end %>
+        </td>
+        <td>
+          <%= f.email %>
+        </td>
+        <td>
+          <% if f.discarded? %>
+            退会済
+          <% else %>
+            有効
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>

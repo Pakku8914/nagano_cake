@@ -1,0 +1,23 @@
+<%= render "public/items/genre", genre: @genre %>
+
+<h1>商品詳細</h1>
+
+<div class="item">
+  <% if @item.image.attached? %>
+    <%= image_tag @item.image, size: "200x200" %>
+  <% else %>
+    <%= image_tag 'noimage', size: "200x200"%>
+  <% end %>
+  <p><%= @item.name %></p>
+  <p><%= @item.introduction %></p>
+  <p>￥<%= delimiter_num((@item.price * 1.1).to_i) %>(税込)</p>
+  <div class="cart">
+    <%= form_with model: @new_cart, url: cart_items_path, method: :post, local:true do |f| %>
+  <!-- 表示せずにデータ送信 -->
+      <%= f.hidden_field :item_id, value: @item.id %>
+      <% f.label :amount %>
+      <%= f.select :amount, @num_arr , {include_blank: "個数選択"} %>
+      <%= f.submit "カートに追加" %>
+    <% end %>
+  </div>
+</div>
